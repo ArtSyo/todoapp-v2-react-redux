@@ -20,7 +20,7 @@ const TASKS = [
 
 const tasks = (state = TASKS, {id, text, isComplited, type}) => {
   switch (type) {
-    case {ADD_TASK}:
+    case ADD_TASK:
       return [
         ...state,
         {
