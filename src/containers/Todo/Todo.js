@@ -27,7 +27,19 @@ class ToDo extends Component {
 
   createTodoElement = ({ key }) => {
     const { todoTask } = this.state;
-    if (todoTask.length > 3 && key === "Enter") {
+    if (todoTask.length > 1 && key === "Enter") {
+      const { createTodoTask } = this.props;
+      createTodoTask(new Date().getTime(), todoTask, false);
+
+      this.setState({
+        todoTask: "",
+      });
+    }
+  };
+
+  addOnClickHandler = () => {
+    const { todoTask } = this.state;
+    if (todoTask.length > 1) {
       const { createTodoTask } = this.props;
       createTodoTask(new Date().getTime(), todoTask, false);
 
@@ -41,10 +53,10 @@ class ToDo extends Component {
     switch (activeFilter) {
       case "completed":
         return tasks.filter((task) => task.isCompleted);
-        break;
+
       case "active":
         return tasks.filter((task) => !task.isCompleted);
-        break;
+
       default:
         return tasks;
     }
@@ -66,7 +78,7 @@ class ToDo extends Component {
 
     const filteredTasks = this.filterTasks(tasks, filters);
 
-    const taskCounter = this.getActiveTasksCounter(tasks)
+    const taskCounter = this.getActiveTasksCounter(tasks);
 
     return (
       <div className="todo-wrapper">
@@ -74,6 +86,7 @@ class ToDo extends Component {
           keyPressed={this.createTodoElement}
           onChange={this.todoInputHandler}
           value={todoTask}
+          addOnClickHandler={this.addOnClickHandler}
         />
         {isTasksExist && (
           <ToDoList

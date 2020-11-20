@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 import './Input.css';
 
-const ToDoInput = ({ value, onChange, keyPressed }) => (
+const ToDoInput = ({ value, onChange, keyPressed, addOnClickHandler }) => (
   <div className="todo-input-wrapper">
-    <i className="fas fa-plus" />
+    <i className="fas fa-plus" onClick={addOnClickHandler}/>
     <input
       className="todo-input"
-      placeholder="Click to add task"
+      placeholder="Type your task here"
       onChange={onChange}
       value={value}
       onKeyPress={keyPressed}
