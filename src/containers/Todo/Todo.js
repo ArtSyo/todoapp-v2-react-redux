@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { createTodoTask, removeTodoTask, completeTodoTask } from "../../action/createTodoTask";
+import {
+  createTodoTask,
+  removeTodoTask,
+  completeTodoTask,
+  changeFilter,
+} from "../../action/createTodoTask";
 
 import Input from "../../components/Input/Input";
 import ToDoList from "../../components/TodoList/TodoList";
@@ -11,7 +16,6 @@ import "./Todo.css";
 
 class ToDo extends Component {
   state = {
-    activeFilter: "all",
     todoTask: "",
   };
 
@@ -20,7 +24,6 @@ class ToDo extends Component {
       todoTask: value,
     });
   };
-
 
   createTodoElement = ({ key }) => {
     const { todoTask } = this.state;
@@ -34,10 +37,36 @@ class ToDo extends Component {
     }
   };
 
+  filterTasks = (tasks, activeFilter) => {
+    switch (activeFilter) {
+      case "completed":
+        return tasks.filter((task) => task.isCompleted);
+        break;
+      case "active":
+        return tasks.filter((task) => !task.isCompleted);
+        break;
+      default:
+        return tasks;
+    }
+  };
+
+  getActiveTasksCounter = (tasks) =>
+    tasks.filter((task) => !task.isCompleted).length;
+
   render() {
-    const { activeFilter, todoTask } = this.state;
-    const { tasks, removeTodoTask, completeTodoTask } = this.props;
+    const { todoTask } = this.state;
+    const {
+      tasks,
+      removeTodoTask,
+      completeTodoTask,
+      filters,
+      changeFilter,
+    } = this.props;
     const isTasksExist = tasks && tasks.length > 0;
+
+    const filteredTasks = this.filterTasks(tasks, filters);
+
+    const taskCounter = this.getActiveTasksCounter(tasks)
 
     return (
       <div className="todo-wrapper">
@@ -46,13 +75,28 @@ class ToDo extends Component {
           onChange={this.todoInputHandler}
           value={todoTask}
         />
-        {isTasksExist && <ToDoList tasksList={tasks} removeTodoTask={removeTodoTask} isCompletedChange={completeTodoTask}/>}
         {isTasksExist && (
-          <Footer amount={tasks.length} activeFilter={activeFilter} />
+          <ToDoList
+            tasksList={filteredTasks}
+            removeTodoTask={removeTodoTask}
+            isCompletedChange={completeTodoTask}
+          />
+        )}
+        {isTasksExist && (
+          <Footer
+            changeFilter={changeFilter}
+            amount={taskCounter}
+            activeFilter={filters}
+          />
         )}
       </div>
     );
   }
 }
 
-export default connect((state) => ({ tasks: state.tasks,}), { createTodoTask, removeTodoTask, completeTodoTask })(ToDo);
+export default connect(({ tasks, filters }) => ({ tasks, filters }), {
+  createTodoTask,
+  removeTodoTask,
+  completeTodoTask,
+  changeFilter,
+})(ToDo);

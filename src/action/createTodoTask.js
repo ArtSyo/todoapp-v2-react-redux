@@ -1,4 +1,9 @@
-import { ADD_TASK, REMOVE_TASK, COMPLETE_TASK } from "../constants";
+import {
+  ADD_TASK,
+  REMOVE_TASK,
+  COMPLETE_TASK,
+  CHANGE_FILTER,
+} from "../constants";
 
 export const createTodoTask = (id, text, isComplited) => {
   return {
@@ -20,5 +25,12 @@ export const completeTodoTask = (id) => {
   return {
     type: COMPLETE_TASK,
     id,
+  };
+};
+
+export const changeFilter = (activefilter) => {
+  return {
+    type: CHANGE_FILTER,
+    activefilter,
   };
 };
