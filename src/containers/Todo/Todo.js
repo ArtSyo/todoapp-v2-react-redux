@@ -1,47 +1,38 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import ToDoInput from '../../components/Input/Input';
-import ToDoList from '../../components/TodoList/TodoList';
-import Footer from '../../components/Footer/Footer';
+import ToDoInput from "../../components/Input/Input";
+import ToDoList from "../../components/TodoList/TodoList";
+import Footer from "../../components/Footer/Footer";
 
-import './Todo.css';
+import "./Todo.css";
 
-const TASKS = [
-  {
-    id: 1,
-    text: 'Learn ReactJS',
-    isCompleted: true,
-  },
-  {
-    id: 2,
-    text: 'Learn Redux',
-    isCompleted: false,
-  },
-  {
-    id: 3,
-    text: 'Learn React Router',
-    isCompleted: false,
-  }
-];
+
 
 class ToDo extends Component {
-
   state = {
-    activeFilter: 'all',
+    activeFilter: "all",
+    todoTask: "",
+  };
+
+  todoInputHandler = ({target: {value}}) => {
+    this.setState({
+      todoTask: value
+    })
+    console.log(this.state.todoTask);
   }
 
   render() {
-    const { activeFilter } = this.state;
-    const tasksList = TASKS;
+    const { activeFilter, todoTask } = this.state;
+    const tasksList = [];
     const isTasksExist = tasksList && tasksList.length > 0;
 
     return (
       <div className="todo-wrapper">
-        <ToDoInput />
+        <ToDoInput onChange={this.todoInputHandler} value={todoTask}/>
         {isTasksExist && <ToDoList tasksList={tasksList} />}
-        {isTasksExist && <Footer 
-        amount={tasksList.length} 
-        activeFilter={activeFilter} />}
+        {isTasksExist && (
+          <Footer amount={tasksList.length} activeFilter={activeFilter} />
+        )}
       </div>
     );
   }
