@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { createTodoTask } from "../../action/createTodoTask";
+import { createTodoTask, removeTodoTask } from "../../action/createTodoTask";
 
-import ToDoInput from "../../components/Input/Input";
+import Input from "../../components/Input/Input";
 import ToDoList from "../../components/TodoList/TodoList";
 import Footer from "../../components/Footer/Footer";
 
@@ -21,7 +21,8 @@ class ToDo extends Component {
     });
   };
 
-  createTodoTask = ({ key }) => {
+
+  createTodoElement = ({ key }) => {
     const { todoTask } = this.state;
     if (todoTask.length > 3 && key === "Enter") {
       const { createTodoTask } = this.props;
@@ -33,19 +34,23 @@ class ToDo extends Component {
     }
   };
 
+  removeTodoElement = () => {
+
+  }
+
   render() {
     const { activeFilter, todoTask } = this.state;
-    const { tasks } = this.props;
+    const { tasks, removeTodoTask } = this.props;
     const isTasksExist = tasks && tasks.length > 0;
 
     return (
       <div className="todo-wrapper">
-        <ToDoInput
-          keyPressed={this.createTodoTask}
+        <Input
+          keyPressed={this.createTodoElement}
           onChange={this.todoInputHandler}
           value={todoTask}
         />
-        {isTasksExist && <ToDoList tasksList={tasks} />}
+        {isTasksExist && <ToDoList tasksList={tasks} removeTodoTask={removeTodoTask}/>}
         {isTasksExist && (
           <Footer amount={tasks.length} activeFilter={activeFilter} />
         )}
@@ -54,9 +59,4 @@ class ToDo extends Component {
   }
 }
 
-export default connect(
-  (state) => ({
-    tasks: state.tasks,
-  }),
-  { createTodoTask }
-)(ToDo);
+export default connect((state) => ({ tasks: state.tasks,}), { createTodoTask, removeTodoTask })(ToDo);
