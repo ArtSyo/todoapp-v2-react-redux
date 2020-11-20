@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { createTodoTask, removeTodoTask } from "../../action/createTodoTask";
+import { createTodoTask, removeTodoTask, completeTodoTask } from "../../action/createTodoTask";
 
 import Input from "../../components/Input/Input";
 import ToDoList from "../../components/TodoList/TodoList";
@@ -34,13 +34,9 @@ class ToDo extends Component {
     }
   };
 
-  removeTodoElement = () => {
-
-  }
-
   render() {
     const { activeFilter, todoTask } = this.state;
-    const { tasks, removeTodoTask } = this.props;
+    const { tasks, removeTodoTask, completeTodoTask } = this.props;
     const isTasksExist = tasks && tasks.length > 0;
 
     return (
@@ -50,7 +46,7 @@ class ToDo extends Component {
           onChange={this.todoInputHandler}
           value={todoTask}
         />
-        {isTasksExist && <ToDoList tasksList={tasks} removeTodoTask={removeTodoTask}/>}
+        {isTasksExist && <ToDoList tasksList={tasks} removeTodoTask={removeTodoTask} isCompletedChange={completeTodoTask}/>}
         {isTasksExist && (
           <Footer amount={tasks.length} activeFilter={activeFilter} />
         )}
@@ -59,4 +55,4 @@ class ToDo extends Component {
   }
 }
 
-export default connect((state) => ({ tasks: state.tasks,}), { createTodoTask, removeTodoTask })(ToDo);
+export default connect((state) => ({ tasks: state.tasks,}), { createTodoTask, removeTodoTask, completeTodoTask })(ToDo);

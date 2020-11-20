@@ -5,10 +5,10 @@ import ToDoItem from '../TodoItem/TodoItem';
 
 import './TodoList.css';
 
-const ToDoList = ({ tasksList, removeTodoTask }) => (
+const ToDoList = ({ tasksList, removeTodoTask, isCompletedChange }) => (
   <ul className="todo-list">
     {tasksList.map(({ id, text, isCompleted }) => (
-      <ToDoItem removeTodoTask={removeTodoTask} id={id} key={id} text={text} isCompleted={isCompleted} />
+      <ToDoItem removeTodoTask={removeTodoTask} isCompleted={isCompleted} id={id} key={id} text={text} isCompletedChange={isCompletedChange} />
     ))}
   </ul>
 );
@@ -16,11 +16,13 @@ const ToDoList = ({ tasksList, removeTodoTask }) => (
 ToDoList.propTypes = {
   tasksList: PropTypes.array,
   removeTodoTask: PropTypes.func,
+  isCompletedChange: PropTypes.func
 }
 
 ToDoList.defaultProps = {
   tasksList: [],
   removeTodoTask: ()=>{},
+  isCompletedChange: () =>{}
 }
 
 export default ToDoList;
